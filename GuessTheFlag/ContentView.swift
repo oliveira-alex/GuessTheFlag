@@ -9,16 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-		ZStack(alignment: .topTrailing) {
-			Color.yellow.edgesIgnoringSafeArea(.all)
-			Color.green.frame(width: 250, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-			Text("Hello, world!")
-				.font(.largeTitle)
-				.background(Color.gray)
-			Text("This is inside a stack")
-				.background(Color.red)
-				.foregroundColor(.blue)
-		}
+//		LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .top, endPoint: .bottom)
+//		RadialGradient(gradient: Gradient(colors: [.blue, .black]), center: .center, startRadius: 20, endRadius: 200)
+		AngularGradient(gradient: Gradient(colors:[.red, .yellow, .green, .blue, .purple, .red]), center: .center )
     }
 }
 
