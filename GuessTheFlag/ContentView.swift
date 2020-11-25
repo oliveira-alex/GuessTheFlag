@@ -15,6 +15,7 @@ struct ContentView: View {
 	@State private var scoreTitle = ""
 	
 	@State private var score = 0
+	@State private var alertMsg = ""
 	
     var body: some View {
 		ZStack {
@@ -52,7 +53,7 @@ struct ContentView: View {
 			}
 		}
 		.alert(isPresented: $showingScore) {
-			Alert(title: Text(scoreTitle), message: Text("Your score is \(score)"), dismissButton: .default(Text("Continue")) {
+			Alert(title: Text(scoreTitle), message: Text(alertMsg), dismissButton: .default(Text("Continue")) {
 				self.askQuestion()
 			})
 		}
@@ -62,9 +63,11 @@ struct ContentView: View {
 		if number == correctAnswer {
 			scoreTitle = "Correct"
 			score += 1
+			alertMsg = "Your score is \(score)"
 		} else {
 			scoreTitle = "Wrong"
 			score -= 1
+			alertMsg = "Wrong. That's the flag of \(countries[number])"
 		}
 		
 		showingScore = true
