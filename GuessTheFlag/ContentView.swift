@@ -33,6 +33,8 @@ struct ContentView: View {
 	@State private var rotationDegrees = [0.0, 0.0, 0.0]
 	@State private var opacity = [1.0, 1.0, 1.0]
 	
+	@State private var lastAnswer = ""
+	
     var body: some View {
 		ZStack {
 			LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
@@ -103,8 +105,13 @@ struct ContentView: View {
 	}
 	
 	func askQuestion() {
-		countries.shuffle()
+		lastAnswer = countries[correctAnswer]
+		
 		correctAnswer = Int.random(in: 0...2)
+		repeat {
+			countries.shuffle()
+		} while countries[correctAnswer] == lastAnswer
+		
 		opacity = [1.0, 1.0, 1.0]
 	}
 }
