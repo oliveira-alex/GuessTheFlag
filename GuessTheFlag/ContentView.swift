@@ -50,15 +50,15 @@ struct ContentView: View {
 				
 				ForEach(0 ..< 3) { flagNumber in
 					Button(action: {
-						DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
 							self.flagTapped(flagNumber)
 						}
 						
-						withAnimation(.interpolatingSpring(stiffness: 30, damping: 5)) {
-							self.rotationDegrees[flagNumber] += 360
-						}
-						
-						withAnimation(.easeIn) {
+						withAnimation(.easeOut(duration: 0.30)) {
+							if flagNumber == correctAnswer {
+								self.rotationDegrees[flagNumber] += 360
+							}
+							
 							for number in 0 ..< 3 {
 								if number != flagNumber {
 									self.opacity[number] = 0.25
@@ -91,13 +91,15 @@ struct ContentView: View {
 			scoreTitle = "Correct"
 			score += 1
 			alertMsg = "Your score is \(score)"
+			
+			askQuestion()
 		} else {
 			scoreTitle = "Wrong"
 			score -= 1
-			alertMsg = "Wrong. That's the flag of \(countries[number])"
+			alertMsg = "That's the flag of \(countries[number])"
+
+			showingScore = true
 		}
-		
-		showingScore = true
 	}
 	
 	func askQuestion() {
