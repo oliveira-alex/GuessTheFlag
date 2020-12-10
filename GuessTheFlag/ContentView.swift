@@ -31,6 +31,7 @@ struct ContentView: View {
 	@State private var alertMsg = ""
 	
 	@State private var rotationDegrees = [0.0, 0.0, 0.0]
+	@State private var opacity = [1.0, 1.0, 1.0]
 	
     var body: some View {
 		ZStack {
@@ -56,10 +57,19 @@ struct ContentView: View {
 						withAnimation(.interpolatingSpring(stiffness: 30, damping: 5)) {
 							self.rotationDegrees[flagNumber] += 360
 						}
+						
+						withAnimation(.easeIn) {
+							for number in 0 ..< 3 {
+								if number != flagNumber {
+									self.opacity[number] = 0.25
+								}
+							}
+						}
 					}) {
 						FlagImage(countryName: self.countries[flagNumber])
 					}
 					.rotation3DEffect(.degrees(rotationDegrees[flagNumber]), axis: (x: 0, y: 1, z: 0))
+					.opacity(opacity[flagNumber])
 				}
 
 				Spacer()
@@ -93,6 +103,7 @@ struct ContentView: View {
 	func askQuestion() {
 		countries.shuffle()
 		correctAnswer = Int.random(in: 0...2)
+		opacity = [1.0, 1.0, 1.0]
 	}
 }
 
