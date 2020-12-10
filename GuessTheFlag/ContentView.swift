@@ -30,9 +30,7 @@ struct ContentView: View {
 	@State private var score = 0
 	@State private var alertMsg = ""
 	
-	@State private var animationAmountButton0 = 0.0
-	@State private var animationAmountButton1 = 0.0
-	@State private var animationAmountButton2 = 0.0
+	@State private var rotationDegrees = [0.0, 0.0, 0.0]
 	
     var body: some View {
 		ZStack {
@@ -49,49 +47,20 @@ struct ContentView: View {
 						.fontWeight(.black)
 				}
 				
-//				ForEach(0 ..< 3) { number in
-				Button(action: {
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-						self.flagTapped(0)
+				ForEach(0 ..< 3) { flagNumber in
+					Button(action: {
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+							self.flagTapped(flagNumber)
+						}
+						
+						withAnimation(.interpolatingSpring(stiffness: 30, damping: 5)) {
+							self.rotationDegrees[flagNumber] += 360
+						}
+					}) {
+						FlagImage(countryName: self.countries[flagNumber])
 					}
-					
-					withAnimation(.interpolatingSpring(stiffness: 30, damping: 5)) {
-						self.animationAmountButton0 += 360
-					}
-				}) {
-					FlagImage(countryName: self.countries[0])
+					.rotation3DEffect(.degrees(rotationDegrees[flagNumber]), axis: (x: 0, y: 1, z: 0))
 				}
-				.rotation3DEffect(.degrees(animationAmountButton0), axis: (x: 0, y: 1, z: 0))
-				
-				
-				Button(action: {
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-						self.flagTapped(1)
-					}
-					
-					withAnimation(.interpolatingSpring(stiffness: 30, damping: 5)) {
-						self.animationAmountButton1 += 360
-					}
-				}) {
-					FlagImage(countryName: self.countries[1])
-				}
-				.rotation3DEffect(.degrees(animationAmountButton1), axis: (x: 0, y: 1, z: 0))
-				
-				
-				Button(action: {
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-						self.flagTapped(2)
-					}
-					
-					
-					withAnimation(.interpolatingSpring(stiffness: 30, damping: 5)) {
-						self.animationAmountButton2 += 360
-					}
-				}) {
-					FlagImage(countryName: self.countries[2])
-				}
-				.rotation3DEffect(.degrees(animationAmountButton2), axis: (x: 0, y: 1, z: 0))
-//				}
 
 				Spacer()
 				
