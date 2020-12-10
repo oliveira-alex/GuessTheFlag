@@ -90,9 +90,9 @@ struct ContentView: View {
 	
 	func flagTapped(_ number: Int) {
 		if number == correctAnswer {
-			scoreTitle = "Correct"
+//			scoreTitle = "Correct"
 			score += 1
-			alertMsg = "Your score is \(score)"
+//			alertMsg = "Your score is \(score)"
 			
 			askQuestion()
 		} else {
