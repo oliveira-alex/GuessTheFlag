@@ -32,6 +32,7 @@ struct ContentView: View {
 	
 	@State private var rotationDegrees = [0.0, 0.0, 0.0]
 	@State private var opacity = [1.0, 1.0, 1.0]
+    @State private var wiggleAmount: [CGSize] = [.zero, .zero, .zero]
 	
 	@State private var lastAnswer = ""
 	
@@ -56,10 +57,20 @@ struct ContentView: View {
 							self.flagTapped(flagNumber)
 						}
 						
-						withAnimation(.easeOut(duration: 0.30)) {
+						withAnimation(.easeOut(duration: 0.50)) {
 							if flagNumber == correctAnswer {
 								self.rotationDegrees[flagNumber] += 360
-							}
+                            } else {
+                                self.wiggleAmount[flagNumber].width = 25
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                                    self.wiggleAmount[flagNumber].width = -25
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
+                                    self.wiggleAmount[flagNumber].width = 0
+                                }
+                            }
 							
 							for number in 0 ..< 3 {
 								if number != flagNumber {
@@ -70,8 +81,10 @@ struct ContentView: View {
 					}) {
 						FlagImage(countryName: self.countries[flagNumber])
 					}
-					.rotation3DEffect(.degrees(rotationDegrees[flagNumber]), axis: (x: 0, y: 1, z: 0))
-					.opacity(opacity[flagNumber])
+                    .offset(wiggleAmount[flagNumber])
+                    .animation(Animation.interpolatingSpring(mass: 2, stiffness: 150, damping: 150, initialVelocity: 15))
+                    .opacity(opacity[flagNumber])
+                    .rotation3DEffect(.degrees(rotationDegrees[flagNumber]), axis: (x: 0, y: 1, z: 0))
 				}
 
 				Spacer()
