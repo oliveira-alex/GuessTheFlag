@@ -33,6 +33,7 @@ struct ContentView: View {
 	@State private var rotationDegrees = [0.0, 0.0, 0.0]
 	@State private var opacity = [1.0, 1.0, 1.0]
     @State private var wiggleAmount: [CGSize] = [.zero, .zero, .zero]
+    @State private var scoreDownMoveAmount: CGSize = .zero
 	
 	@State private var lastAnswer = ""
 	
@@ -60,6 +61,14 @@ struct ContentView: View {
 						withAnimation(.easeOut(duration: 0.50)) {
 							if flagNumber == correctAnswer {
 								self.rotationDegrees[flagNumber] += 360
+                                
+                                self.scoreDownMoveAmount.height = -30
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    self.score += 1
+                                    self.scoreDownMoveAmount.height = 0
+                                }
+                                
                             } else {
                                 self.wiggleAmount[flagNumber].width = 25
                                 
@@ -69,6 +78,13 @@ struct ContentView: View {
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
                                     self.wiggleAmount[flagNumber].width = 0
+                                }
+                                
+                                self.scoreDownMoveAmount.height = 15
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                                    self.score -= 1
+                                    self.scoreDownMoveAmount.height = 0
                                 }
                             }
 							
@@ -92,6 +108,8 @@ struct ContentView: View {
 				Text("Score: \(score)")
 					.foregroundColor(.white)
 					.font(.title2)
+                    .offset(scoreDownMoveAmount)
+                    .animation(Animation.interpolatingSpring(mass: 1, stiffness: 150, damping: 300, initialVelocity: 15))
 			}
 		}
 		.alert(isPresented: $showingScore) {
@@ -104,14 +122,14 @@ struct ContentView: View {
 	func flagTapped(_ number: Int) {
 		if number == correctAnswer {
 //			scoreTitle = "Correct!"
-			score += 1
+//			score += 1
 //			alertMsg = "Your score is \(score)"
 			
 //            showingScore = true
 			askQuestion()
 		} else {
 			scoreTitle = "Wrong answer"
-			score -= 1
+//			score -= 1
 			alertMsg = "That's the flag of \(countries[number])"
 
 			showingScore = true
