@@ -21,6 +21,20 @@ struct FlagImage: View {
 }
 
 struct ContentView: View {
+    let labels = [
+        "Estonia": "Flag with three horizontal stripes of equal size. Top stripe blue, middle stripe black, bottom stripe white",
+        "France": "Flag with three vertical stripes of equal size. Left stripe blue, middle stripe white, right stripe red",
+        "Germany": "Flag with three horizontal stripes of equal size. Top stripe black, middle stripe red, bottom stripe yellow",
+        "Ireland": "Flag with three vertical stripes of equal size. Left stripe green, middle stripe white, right stripe orange",
+        "Italy": "Flag with three vertical stripes of equal size. Left stripe green, middle stripe white, right stripe red",
+        "Nigeria": "Flag with three vertical stripes of equal size. Left stripe green, middle stripe white, right stripe green",
+        "Poland": "Flag with two horizontal stripes of equal size. Top stripe white, bottom stripe red",
+        "Russia": "Flag with three horizontal stripes of equal size. Top stripe white, middle stripe blue, bottom stripe red",
+        "Spain": "Flag with three horizontal stripes. Smaller top and bottom red stripes, bigger middle yellow stripe",
+        "UK": "Flag with red and white crosses, background blue",
+        "US": "Flag with multiple red and white horizontal stripes with blue rectangle white starred"
+    ]
+    
 	@State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
 	@State private var correctAnswer = Int.random(in: 0...2)
 	
@@ -96,6 +110,7 @@ struct ContentView: View {
 						}
 					}) {
 						FlagImage(countryName: self.countries[flagNumber])
+                            .accessibilityLabel(Text(self.labels[self.countries[flagNumber], default: "Unknown flag"]))
 					}
                     .offset(wiggleAmount[flagNumber])
                     .animation(Animation.interpolatingSpring(mass: 2, stiffness: 150, damping: 150, initialVelocity: 15))
